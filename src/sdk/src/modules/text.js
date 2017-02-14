@@ -256,7 +256,7 @@ export default class Text extends Base {
      */
     setCanvasRatio() {
         const canvasElement = this.getCanvasElement();
-        const cssWidth = parseInt(canvasElement.style.maxWidth, 10);
+        const cssWidth = parseInt(canvasElement.style.width, 10);
         const originWidth = canvasElement.width;
         const ratio = originWidth / cssWidth;
 
@@ -347,8 +347,8 @@ export default class Text extends Base {
 
         obj.setText(this._textarea.value);
 
-        textareaStyle.width = `${Math.ceil(obj.getWidth() / ratio)}px`;
-        textareaStyle.height = `${Math.ceil(obj.getHeight() / ratio)}px`;
+        textareaStyle.width = `${Math.ceil(obj.getWidth())}px`;
+        textareaStyle.height = `${Math.ceil(obj.getHeight())}px`;
     }
 
     /**
@@ -363,8 +363,8 @@ export default class Text extends Base {
         setTimeout(() => {
             obj.setText(this._textarea.value);
 
-            textareaStyle.width = `${Math.ceil(obj.getWidth() / ratio)}px`;
-            textareaStyle.height = `${Math.ceil(obj.getHeight() / ratio)}px`;
+            textareaStyle.width = `${Math.ceil(obj.getWidth())}px`;
+            textareaStyle.height = `${Math.ceil(obj.getHeight())}px`;
         }, 0);
     }
 
@@ -428,7 +428,7 @@ export default class Text extends Base {
         const newClickTime = (new Date()).getTime();
 
         if (this._isDoubleClick(newClickTime)) {
-            this._changeToEditingMode(fEvent.target);
+            this._changeToEditingMode(fEvent);
             this._listeners.dbclick(); // fire dbclick event
         }
 
@@ -450,9 +450,11 @@ export default class Text extends Base {
      * @param {fabric.Text} obj - Text object fired event
      * @private
      */
-    _changeToEditingMode(obj) {
+    _changeToEditingMode(event) {
+        let obj = event.target;
         const ratio = this.getCanvasRatio();
         const textareaStyle = this._textarea.style;
+        console.log(event,ratio);
 
         this.isPrevEditing = true;
 
@@ -471,14 +473,15 @@ export default class Text extends Base {
         };
 
         textareaStyle.display = 'block';
-        textareaStyle.left = `${obj.oCoords.tl.x / ratio}px`;
-        textareaStyle.top = `${obj.oCoords.tl.y / ratio}px`;
-        textareaStyle.width = `${Math.ceil(obj.getWidth() / ratio)}px`;
-        textareaStyle.height = `${Math.ceil(obj.getHeight() / ratio)}px`;
+        //obj.oCoords.tl.x
+        textareaStyle.left = `${obj.oCoords.tl.x}px`;
+        textareaStyle.top = `${obj.oCoords.tl.y}px`;
+        textareaStyle.width = `${Math.ceil(obj.getWidth())}px`;
+        textareaStyle.height = `${Math.ceil(obj.getHeight())}px`;
         textareaStyle.transform = `rotate(${obj.getAngle()}deg)`;
         textareaStyle.color = obj.getFill();
 
-        textareaStyle['font-size'] = `${obj.getFontSize() / ratio}px`;
+        textareaStyle['font-size'] = `${obj.getFontSize()}px`;
         textareaStyle['font-family'] = obj.getFontFamily();
         textareaStyle['font-style'] = obj.getFontStyle();
         textareaStyle['font-weight'] = obj.getFontWeight();

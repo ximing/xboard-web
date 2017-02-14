@@ -35,7 +35,7 @@ export default class Pan extends Base {
         const canvas = this.getCanvas();
 
         canvas.defaultCursor = 'default';
-        canvas.selection = false;
+        canvas.selection = true;
 
         canvas.forEachObject(obj => {
             obj.set({

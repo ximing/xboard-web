@@ -3,7 +3,9 @@ import commandFactory from './command';
 import consts from './consts';
 import util from './lib/util';
 import CustomEvents from './lib/custom-event';
-
+import $ from 'jQuery';
+import mouseWheel from './lib/jquery-mousewheel';
+mouseWheel($);
 const events = consts.eventNames;
 const modules = consts.moduleNames;
 const commands = consts.commandNames;
@@ -35,7 +37,8 @@ class FabricPhoto {
             selectedObject: this._onSelectedObject.bind(this),
             movingObject: this._onMovingObject.bind(this),
             scalingObject: this._onScalingObject.bind(this),
-            createdPath: this._onCreatedPath.bind(this)
+            createdPath: this._onCreatedPath.bind(this),
+            mousewheel:this._onMousewheel.bind(this)
         };
 
         this._setCanvas(element, option.cssMaxWidth, option.cssMaxHeight);
@@ -91,10 +94,20 @@ class FabricPhoto {
     }
     _attachDomEvents() {
         fabric.util.addListener(document, 'keydown', this._handlers.keydown);
+        $(document).on('mousewheel',this._handlers.mousewheel)
     }
     _detachDomEvents() {
         fabric.util.removeListener(document, 'keydown', this._handlers.keydown);
+        $(document).off('mousewheel',this._handlers.mousewheel)
     }
+
+    _onMousewheel(e){
+        e.stopPropagation();
+        e.preventDefault();
+        //event.deltaX  evetn.deltaY
+        console.log(e.deltaX,e.deltaY);
+    }
+
     _onKeyDown(e) {
         if ((e.ctrlKey || e.metaKey) && e.keyCode === keyCodes.Z) {
             this.undo();
@@ -1165,17 +1178,6 @@ class FabricPhoto {
         if (isUndefined(options.top)) {
             options.top = centerPosition.top;
         }
-    }
-
-    /**
-     * adjustCanvasDimension
-     */
-    adjustCanvasDimension(){
-        this._getMainModule().adjustCanvasDimension();
-    }
-
-    getViewPortInfo(){
-        return this._getMainModule().getViewPortInfo();
     }
 
 }

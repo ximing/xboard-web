@@ -63,7 +63,7 @@ export default class Line extends Base {
         const canvas = this.getCanvas();
 
         canvas.defaultCursor = 'default';
-        canvas.selection = false;
+        canvas.selection = true;
 
         canvas.forEachObject(obj => {
             obj.set({

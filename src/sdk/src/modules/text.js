@@ -87,7 +87,7 @@ export default class Text extends Base {
     end() {
         const canvas = this.getCanvas();
 
-        canvas.selection = false;
+        canvas.selection = true;
         canvas.defaultCursor = 'default';
         canvas.deactivateAllWithDispatch(); // action for undo stack
         canvas.off({

@@ -1,6 +1,6 @@
 import React, {Component,PropTypes} from 'react';
 import classnames from 'classnames';
-import {Icon} from '../icon';
+import Icon from '../icon';
 
 export  class Radio extends Component {
 

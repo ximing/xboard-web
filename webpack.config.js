@@ -12,7 +12,7 @@ module.exports = {
     entry: {
         'index': [
             'react-hot-loader/patch',
-            `webpack-dev-server/client?${c9?c9Host:'http://127.0.0.1:9005'}`,
+            `webpack-dev-server/client?${c9?c9Host:'http://127.0.0.1:9006'}`,
             'webpack/hot/only-dev-server',
             './src/index.js'
         ]
@@ -28,7 +28,7 @@ module.exports = {
     devServer: {
         contentBase: [path.join(__dirname, "html"), path.join(__dirname, "dist")],
         compress: true,
-        port: parseInt(process.env.PORT) || 9005,
+        port: parseInt(process.env.PORT) || 9006,
         host: "0.0.0.0",
         hot: true,
         inline: true,

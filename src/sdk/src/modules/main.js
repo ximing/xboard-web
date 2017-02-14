@@ -238,4 +238,9 @@ export default class Main extends Base {
     getImageName() {
         return this.imageName;
     }
+
+    pan(deltaX,deltaY){
+        var delta = new fabric.Point(deltaX,deltaY) ;
+        this.canvas.relativePan(delta);
+    }
 }

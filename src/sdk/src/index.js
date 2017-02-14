@@ -3,6 +3,8 @@ import commandFactory from './command';
 import consts from './consts';
 import util from './lib/util';
 import CustomEvents from './lib/custom-event';
+import scrollSkip from './lib/scroll-skip';
+
 import $ from 'jQuery';
 import mouseWheel from './lib/jquery-mousewheel';
 mouseWheel($);
@@ -104,8 +106,7 @@ class FabricPhoto {
     _onMousewheel(e){
         e.stopPropagation();
         e.preventDefault();
-        //event.deltaX  evetn.deltaY
-        console.log(e.deltaX,e.deltaY);
+        this._getMainModule().pan(scrollSkip(-e.deltaX),scrollSkip(e.deltaY));
     }
 
     _onKeyDown(e) {
@@ -922,9 +923,7 @@ class FabricPhoto {
         if (this.getCurrentState() !== states.TEXT) {
             return;
         }
-
         this._state = states.NORMAL;
-
         this._getModule(modules.TEXT).end();
     }
 

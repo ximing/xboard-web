@@ -1,0 +1,28 @@
+.canvas-container {
+  .draw-tool {
+    position: fixed;
+    left: 10px;
+    top: 30px;
+    box-sizing: border-box;
+    border-radius: 2px;
+    background-color: #fff;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+    .tool {
+      width: 44px;
+      height: 40px;
+      box-sizing: border-box;
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+      display: block;
+      background-color: rgba(0,0,0,.05);
+    }
+  }
+}
+
+.canvas-container-inner {
+  position: absolute;
+  top: 0;
+  left: 0px;
+}

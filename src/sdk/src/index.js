@@ -291,6 +291,12 @@ class FabricPhoto {
         this._canvas = mainModule.getCanvas();
     }
 
+    setCssMaxDimension(cssMaxWidth, cssMaxHeight){
+        this._getMainModule().setCssMaxDimension({
+            width:cssMaxWidth,
+            height:cssMaxHeight
+        })
+    }
     /**
      * Returns main module
      * @returns {Module} Main module
@@ -400,87 +406,6 @@ class FabricPhoto {
     redo() {
         this.endAll();
         this._module.redo();
-    }
-
-    /**
-     * Load image from file
-     * @param {File} imgFile - Image file
-     * @param {string} [imageName] - imageName
-     * @example
-     * fabricPhoto.loadImageFromFile(file);
-     */
-    loadImageFromFile(imgFile, imageName) {
-        if (!imgFile) {
-            return;
-        }
-
-        this.loadImageFromURL(
-            DomURL.createObjectURL(imgFile),
-            imageName || imgFile.name
-        );
-    }
-
-    /**
-     * Load image from url
-     * @param {string} url - File url
-     * @param {string} imageName - imageName
-     * @example
-     * fabricPhoto.loadImageFromURL('http://url/testImage.png', 'lena')
-     */
-    loadImageFromURL(url, imageName) {
-        if (!imageName || !url) {
-            return;
-        }
-
-        const callback = this._callbackAfterImageLoading.bind(this);
-        const command = commandFactory.create(commands.LOAD_IMAGE, imageName, url);
-        command.setExecuteCallback(callback)
-            .setUndoCallback(oImage => {
-                if (oImage) {
-                    callback(oImage);
-                }
-                else {
-                    this.fire(events.CLEAR_IMAGE);
-                }
-            });
-        this.execute(command);
-    }
-
-
-    /**
-     * Callback after image loading
-     * @param {?fabric.Image} oImage - Image instance
-     * @private
-     */
-    _callbackAfterImageLoading(oImage) {
-        const mainModule = this._getMainModule();
-        const canvasElement = mainModule.getCanvasElement();
-        const {
-            width,
-            height
-        } = canvasElement.getBoundingClientRect();
-
-        /**
-         * @event fabricPhoto#loadImage
-         * @param {object} dimension
-         *  @param {number} dimension.originalWidth - original image width
-         *  @param {number} dimension.originalHeight - original image height
-         *  @param {number} dimension.currentWidth - current width (css)
-         *  @param {number} dimension.current - current height (css)
-         * @example
-         * fabricPhoto.on('loadImage', function(dimension) {
-         *     console.log(dimension.originalWidth);
-         *     console.log(dimension.originalHeight);
-         *     console.log(dimension.currentWidth);
-         *     console.log(dimension.currentHeight);
-         * });
-         */
-        this.fire(events.LOAD_IMAGE, {
-            originalWidth: oImage.width,
-            originalHeight: oImage.height,
-            currentWidth: width,
-            currentHeight: height
-        });
     }
 
     /**

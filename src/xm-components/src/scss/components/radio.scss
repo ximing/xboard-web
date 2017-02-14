@@ -1,0 +1,30 @@
+$ctn-padding-normal     : 5px;
+$ctn-padding-xlarge     : 15px;
+$primary                    : #118BFB;
+$font-size-large        : 16px; //h4
+$color-dark                 : rgba(0,0,0,.54);/*#666666*/
+
+
+.comp-radio {
+  display: block;
+  cursor: pointer;
+  user-select: none;
+  margin:$ctn-padding-normal 0;
+  &:hover {
+    .dxicon-checkbox{
+      //background-color:#62B9E0;
+    }
+  }
+
+  .dxicon-radio.dxicon{
+    margin-right: $ctn-padding-xlarge;
+    color:$primary;
+    font-size: $font-size-large;
+    vertical-align: 0px;
+  }
+  &.disabled{
+    .dxicon-radio.dxicon{
+      color:$color-dark;
+    }
+  }
+}

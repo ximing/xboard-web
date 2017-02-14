@@ -1,0 +1,61 @@
+.editor-header{
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+  z-index: 110;
+  background: #fff;
+  user-select: none;
+  background: -webkit-linear-gradient(top,#fdfdfd,#fff);
+  background: -ms-linear-gradient(top,#fdfdfd,#fff);
+  //box-shadow: 0 2px 3px 0 hsla(0,0%,39%,.15);
+  height: 50px;
+  line-height: 50px;
+}
+.editor-body{
+  padding: 10px 0;
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 52px);
+  overflow: hidden;
+  .editormd{
+    border: none;
+    box-shadow: 0 1px 6px #ccc;
+    border-bottom: 1px solid #d9d9d9;
+    .CodeMirror-gutters{
+      background-color: #FFF;
+    }
+    .CodeMirror{
+      background-color: #fff;
+    }
+    .editormd-preview{
+      background-color: #fff;
+    }
+  }
+  .editormd-toolbar{
+    width: 100%;
+    min-height: 37px;
+    background: #f0f0f0;
+    display: none;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    z-index: 10;
+    box-shadow: 0 2px 4px hsla(0,0%,8%,.15);
+    &.scroll{
+      box-shadow: 0 2px 4px hsla(0,0%,8%,.15);
+    }
+    border: none;
+    .editormd-menu{
+      width: 910px;
+      margin: 0 auto;
+    }
+    .editormd-menu>li>a{
+      border: none;
+      i{
+        font-weight:200;
+      }
+    }
+  }
+}

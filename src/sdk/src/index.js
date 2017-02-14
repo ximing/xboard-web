@@ -356,12 +356,10 @@ class FabricPhoto {
      * fabricPhoto.endAll(); // === fabricPhoto.endCropping();
      */
     endAll() {
-        this.endCropping();
         this.endTextMode();
         this.endFreeDrawing();
         this.endLineDrawing();
         this.endArrowDrawing();
-        this.endMosaicDrawing();
         this.endDrawingShapeMode();
         this.endPan();
         this.deactivateAll();
@@ -443,84 +441,6 @@ class FabricPhoto {
         });
 
         this._canvas.add(obj).setActiveObject(obj);
-    }
-
-    /**
-     * Start cropping
-     * @example
-     * fabricPhoto.startCropping();
-     */
-    startCropping() {
-        if (this.getCurrentState() === states.CROP) {
-            return;
-        }
-
-        this.endAll();
-        this._state = states.CROP;
-        const cropper = this._getModule(modules.CROPPER);
-        cropper.start();
-        this.fire(events.START_CROPPING);
-    }
-
-    /**
-     * Apply cropping
-     * @param {boolean} [isApplying] - Whether the cropping is applied or canceled
-     * @example
-     * fabricPhoto.startCropping();
-     * fabricPhoto.endCropping(false); // cancel cropping
-     *
-     * fabricPhoto.startCropping();
-     * fabricPhoto.endCropping(true); // apply cropping
-     */
-    endCropping(isApplying) {
-        if (this.getCurrentState() !== states.CROP) {
-            return;
-        }
-
-        const cropper = this._getModule(modules.CROPPER);
-        this._state = states.NORMAL;
-        const data = cropper.end(isApplying);
-
-        this.once('loadImage', () => {
-            this.fire(events.END_CROPPING);
-        });
-
-        if (data) {
-            this.loadImageFromURL(data.url, data.imageName);
-        }
-    }
-    /**
-     * start cropping
-     */
-    startCropByBoundInfo(){
-        this._state = states.CROP;
-    }
-    /**
-     * Apply cropping
-     * @param {object} [cropInfo] - crop bound info left top width height
-     */
-    endCropByBoundInfo(cropInfo){
-        if(!cropInfo){
-            return;
-        }
-        this.endAll();
-
-        const data = {
-            imageName: this.getImageName(),
-            url: this._canvas.toDataURL(cropInfo)
-        };
-
-        this.once('loadImage', () => {
-            this.fire(events.END_CROPPING);
-        });
-
-        if (data) {
-            this.loadImageFromURL(data.url, data.imageName);
-        }
-    }
-
-    getViewPortImage(){
-        return this._getMainModule().getViewPortImage();
     }
 
     /**
@@ -746,48 +666,6 @@ class FabricPhoto {
         this._getModule(modules.ARROW).end();
         this._state = states.NORMAL;
         this.fire(events.END_ARROW_DRAWING);
-    }
-
-
-    /**
-     * Start mosaic mode
-     * @param {{dimensions: number}} [setting] - dimensions
-     * @example
-     * fabricPhoto.startMosaicDrawing();
-     * fabricPhoto.endMosaicDrawing();
-     * fabricPhoto.startLineDrawing({
-     *     dimensions: 12,
-     * });
-     */
-    startMosaicDrawing(setting) {
-        this.endAll();
-        this._getModule(modules.MOSAIC).start(setting);
-        this._state = states.MOSAIC;
-
-        this.fire(events.START_MOSAIC_DRAWING);
-    }
-
-    /**
-     * End endMosaic mode
-     * @example
-     * fabricPhoto.startMosaicDrawing();
-     * fabricPhoto.endMosaicDrawing();
-     */
-    endMosaicDrawing() {
-        this._getModule(modules.MOSAIC).end();
-        this._state = states.NORMAL;
-        this.fire(events.END_MOSAIC_DRAWING);
-    }
-    /**
-     * Start to draw shape on canvas (bind event on canvas)
-     * @example
-     * fabricPhoto.startDrawingShapeMode();
-     */
-    startDrawingShapeMode() {
-        if (this.getCurrentState() !== states.SHAPE) {
-            this._state = states.SHAPE;
-            this._getModule(modules.SHAPE).startDrawingMode();
-        }
     }
 
     /**

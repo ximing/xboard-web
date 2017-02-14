@@ -3,13 +3,10 @@ import CustomEvents from './lib/custom-event';
 import Main from './modules/main';
 import Draw from './modules/draw';
 import Text from './modules/text';
-import ImageLoader from './modules/image-loader';
 import Rotation from './modules/rotation';
 import Shape from './modules/shape';
 import Line from './modules/line';
 import Arrow from './modules/arrow';
-import Cropper from './modules/cropper';
-import Mosaic from './modules/mosaic';
 import Pan from './modules/pan';
 
 import consts from './consts';
@@ -41,13 +38,10 @@ export default class{
         this._register(main);
         this._register(new Draw(main));
         this._register(new Text(main));
-        this._register(new ImageLoader(main));
-        this._register(new Mosaic(main));
         this._register(new Rotation(main));
         this._register(new Shape(main));
         this._register(new Line(main));
         this._register(new Arrow(main));
-        this._register(new Cropper(main));
         this._register(new Pan(main));
 
     }

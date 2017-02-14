@@ -11,6 +11,7 @@
     "dll": "./node_modules/.bin/webpack --config webpack.dll.config.js",
     "fp:pull": "git subtree pull --prefix=src/xm-components xc master --squash",
     "fp:push": "git subtree push --prefix=src/xm-components xc master --squash",
+    "sdk:push": "git subtree push --prefix=src/sdk sdk master --squash",
     "fp:split": "git subtree split --rejoin --prefix=src/xm-components -b xc",
     "fpu": "git push fp new-fp:master"
   },

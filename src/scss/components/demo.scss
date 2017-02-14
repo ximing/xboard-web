@@ -1,0 +1,19 @@
+/**
+ * Created by liz
+ * Email: lizhengnacl@163.com
+ * Tel: 18686768624
+ * Date: 17/2/9
+ */
+/* todo 看能否去掉显示声明hover样式 */
+.example-xm-tips{
+    position: relative;
+    border-radius: 4px;
+    line-height: 25px;
+    text-align: center;
+    display: inline-block;
+    &:hover{
+        .xm-tips{
+            display: inline-block;
+        }
+    }
+}

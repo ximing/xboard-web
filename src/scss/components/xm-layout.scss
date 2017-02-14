@@ -1,0 +1,202 @@
+/**
+ * Created by liz
+ * Email: lizhengnacl@163.com
+ * Tel: 18686768624
+ * Date: 16/10/31
+ */
+/* variables */
+$xm-layout-font-size: 14px;
+// nav
+$xm-layout-nav-max-width: 220px;
+$xm-layout-nav-min-width: 60px;
+$xm-layout-nav-tile-width: 130px;
+$xm-layout-nav-item-height: 60px;
+$xm-layout-nav-border-right: 1px;
+// center
+$xm-layout-center-max-width: 1200px;
+$xm-layout-center-min-width: 850px;
+// nav
+
+/* mixin */
+@mixin clear-space(){
+    font-size: 0;
+    letter-spacing: -4px;
+}
+
+@mixin reset-space(){
+    font-size: $xm-layout-font-size;
+    letter-spacing: 0;
+}
+
+@mixin ellipsis(
+    $width: 100%,
+    $display: inline-block
+) {
+
+    display: $display;
+    max-width: $width;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+}
+
+/* default */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.xm-layout-wrapper{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    //overflow-y: auto;
+}
+
+.xm-layout-nav{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: $xm-layout-nav-max-width;
+    z-index: 1;
+    //overflow-y: auto;
+}
+
+.xm-layout-center{
+    max-width: $xm-layout-center-max-width;
+    min-width: $xm-layout-center-min-width;
+    height: 100%;
+    margin: 0 auto;
+    overflow-y: auto;
+}
+
+/* margin堆叠 */
+.xm-layout-wrapper, .xm-layout-nav, .xm-layout-center{
+    padding-top: 1px;
+    margin-top: -1px;
+}
+
+/* media */
+@media (max-width: 1660px){ // 1556px
+    .xm-layout-wrapper{
+        .xm-layout-center{
+            margin-left: $xm-layout-nav-max-width;
+        }
+    }
+}
+
+@media (max-width: 1070px) {
+    .xm-layout-wrapper{
+        .xm-layout-nav{
+            width: $xm-layout-nav-min-width;
+            .nav-item-icon{
+                width: inherit;
+                left: 0;
+                &:hover{
+                    .xm-layout-nav-item-icon-tip{
+                        display: inline-block;
+                    }
+                }
+            }
+            .nav-item-title, .nav-item-count{
+                display: none;
+            }
+        }
+        .xm-layout-center{
+            margin-left: 60px;
+        }
+    }
+}
+
+/* index */
+.xm-layout-nav{
+    @include clear-space;
+    background-color: #F8F8F8;
+    border-right: $xm-layout-nav-border-right solid rgba(221,221,221, 0.6);
+}
+
+.xm-layout-nav-item{
+    width: 100%;
+    height: $xm-layout-nav-item-height;
+    a{
+        display: inherit;
+        height: inherit;
+        width: inherit;
+        @include clear-space;
+    }
+    &:hover{
+        background-color: #F3FAFF;
+        cursor: pointer;
+        .nav-item-icon, .nav-item-title, .nav-item-count{
+            color: rgb(0, 136, 254);
+        }
+    }
+    .nav-item-icon, .nav-item-title, .nav-item-count{
+        @include reset-space;
+        display: inline-block;
+        height: inherit;
+        line-height: $xm-layout-nav-item-height;
+        text-align: center;
+        color: #999;
+        position: relative;
+    }
+
+    .nav-item-icon{
+        width: $xm-layout-nav-min-width - $xm-layout-nav-border-right;
+    }
+
+    .nav-item-title{
+        width: $xm-layout-nav-tile-width;
+        text-align: left;
+    }
+
+    .nav-item-count{
+        width: $xm-layout-nav-max-width - $xm-layout-nav-min-width - $xm-layout-nav-tile-width;
+        text-align: left;
+    }
+}
+
+/* 被选中 */
+.xm-layout-nav-item.selected{
+    background-color: #DAEEFF;
+    .nav-item-icon, .nav-item-title, .nav-item-count{
+        color: rgb(0, 136, 254);
+    }
+}
+/* tip */
+.xm-layout-nav-item-icon-tip{
+    @include reset-space;
+    position: absolute;
+    display: inline-block;
+    /* position为absolute会使文本强制换行 */
+    white-space: nowrap;
+    top: 50%;
+    left: 110%;
+    height: 30px;
+    line-height: 20px;
+
+    /* ie9 */
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    display: none;
+    &:after{
+        content: '';
+        display: block;
+        border: 8px solid white;
+        position: absolute;
+        top: 50%;
+        right: 100%;
+        -ms-transform: translate(0, -50%);
+        transform: translate(0, -50%);
+        border-color: transparent white transparent transparent;
+    }
+}

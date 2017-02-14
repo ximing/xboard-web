@@ -1,0 +1,51 @@
+.nx-layout {
+  overflow: auto;
+  background: white;
+  height: $full-percentage;
+  min-width: $layout-min-width ;
+
+  &-header {
+    background: #F9F9F9;
+    padding: $padding-0;
+    height: $layout-header-height ;
+    line-height: $layout-header-height ;
+    border-bottom: 1px solid #D8D8D8;
+    box-sizing: border-box;
+    position: fixed;
+    width: $full-percentage;
+  }
+  &-main{
+    height: $full-percentage;
+  }
+  &-sider {
+    height: $full-percentage;
+    width: $layout-sider-width ;
+    float: left;
+    box-sizing: border-box;
+    background: $color-darkblue;
+    padding-top: $layout-header-height ;
+  }
+  &-content {
+    height: $full-percentage;
+    padding-top: $layout-header-height ;
+    box-sizing: border-box;
+    overflow: auto;
+  }
+}
+body{
+  padding: $padding-0;
+  margin: $padding-0;
+}
+html,body,#xm_container{
+  height: $full-percentage;
+}
+
+
+/*demo  tab*/
+.demo-tab{
+  height: 50px;
+  line-height: 50px;
+  padding-left: 40px;
+  color: white;
+  cursor: pointer;
+}

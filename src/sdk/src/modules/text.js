@@ -39,32 +39,78 @@ export default class Text extends Base {
     constructor(parent) {
         super();
         this.setParent(parent);
+
+        /**
+         * Component name
+         * @type {string}
+         */
         this.name = consts.moduleNames.TEXT;
+
+        /**
+         * Default text style
+         * @type {object}
+         */
         this._defaultStyles = defaultStyles;
+
+        /**
+         * Selected state
+         * @type {boolean}
+         */
         this._isSelected = false;
+
+        /**
+         * Selected text object
+         * @type {object}
+         */
         this._selectedObj = {};
 
-        /*Editing text object*/
+        /**
+         * Editing text object
+         * @type {object}
+         */
         this._editingObj = {};
 
-        /*Listeners for fabric event*/
+        /**
+         * Listeners for fabric event
+         * @type {object}
+         */
         this._listeners = {};
 
-        //文本编辑框
+        /**
+         * Textarea element for editing
+         * @type {HTMLElement}
+         */
         this._textarea = null;
 
-        /*Ratio of current canvas*/
+        /**
+         * Ratio of current canvas
+         * @type {number}
+         */
         this._ratio = 1;
 
+        /**
+         * Last click time
+         * @type {Date}
+         */
         this._lastClickTime = (new Date()).getTime();
 
-        /*Text object infos before editing*/
+        /**
+         * Text object infos before editing
+         * @type {Object}
+         */
         this._editingObjInfos = {};
 
-        /*Previous state of editing*/
+        /**
+         * Previous state of editing
+         * @type {boolean}
+         */
         this.isPrevEditing = false;
     }
 
+    /**
+     * Start input text mode
+     * @param {object} listeners - Callback functions of fabric event
+     */
     start(listeners) {
         const canvas = this.getCanvas();
 
@@ -84,6 +130,9 @@ export default class Text extends Base {
         this.setCanvasRatio();
     }
 
+    /**
+     * End input text mode
+     */
     end() {
         const canvas = this.getCanvas();
 
@@ -123,12 +172,11 @@ export default class Text extends Base {
         this._setInitPos(options.position);
 
         if (options.styles) {
-            styles = Object.assign(styles,options.styles);
+            styles = util.extend(options.styles, styles);
         }
 
         const newText = new fabric.Text(text, styles);
         newText.set(consts.fObjectOptions.SELECTION_STYLE);
-        newText.set({objectCaching:false});
         newText.on({
             mouseup: this._onFabricMouseUp.bind(this)
         });
@@ -208,7 +256,7 @@ export default class Text extends Base {
      */
     setCanvasRatio() {
         const canvasElement = this.getCanvasElement();
-        const cssWidth = parseInt(canvasElement.style.width, 10);
+        const cssWidth = parseInt(canvasElement.style.maxWidth, 10);
         const originWidth = canvasElement.width;
         const ratio = originWidth / cssWidth;
 
@@ -220,11 +268,7 @@ export default class Text extends Base {
      * @returns {number} Ratio value
      */
     getCanvasRatio() {
-        const canvasElement = this.getCanvasElement();
-        const cssWidth = parseInt(canvasElement.style.width, 10);
-        const originWidth = canvasElement.width;
-        const ratio = originWidth / cssWidth;
-        return ratio;
+        return this._ratio;
     }
 
     /**
@@ -256,10 +300,10 @@ export default class Text extends Base {
         this._textarea = textarea;
 
         this._listeners = Object.assign(this._listeners, {
-            input: util.bind(this._onInput,this),
-            keydown: util.bind(this._onKeyDown,this),
-            blur: util.bind(this._onBlur, this),
-            scroll:util.bind(this._onScroll, this)
+            input: this._onInput.bind(this),
+            keydown: this._onKeyDown.bind(this),
+            blur: this._onBlur.bind(this),
+            scroll: this._onScroll.bind(this)
         });
 
         if (browser.msie && browser.version === 9) {
@@ -329,25 +373,26 @@ export default class Text extends Base {
      * @private
      */
     _onBlur() {
+        const ratio = this.getCanvasRatio();
         const editingObj = this._editingObj;
         const editingObjInfos = this._editingObjInfos;
-        let transWidth = (editingObj.getWidth()) - (editingObjInfos.width);
-        let transHeight = (editingObj.getHeight()) - (editingObjInfos.height);
+        let transWidth = (editingObj.getWidth() / ratio) - (editingObjInfos.width / ratio);
+        let transHeight = (editingObj.getHeight() / ratio) - (editingObjInfos.height / ratio);
 
-        // if (ratio === 1) {
-        //     transWidth /= 2;
-        //     transHeight /= 2;
-        // }
+        if (ratio === 1) {
+            transWidth /= 2;
+            transHeight /= 2;
+        }
 
         this._textarea.style.display = 'none';
 
         this._editingObj.set({
-            left: editingObjInfos.left + transWidth / 2,
-            top: editingObjInfos.top + transHeight / 2
+            left: editingObjInfos.left + transWidth,
+            top: editingObjInfos.top + transHeight
         });
 
         this.getCanvas().add(this._editingObj);
-        //this._editingObj.
+
         this.getCanvas().on('object:removed', this._listeners.remove);
     }
 
@@ -383,7 +428,7 @@ export default class Text extends Base {
         const newClickTime = (new Date()).getTime();
 
         if (this._isDoubleClick(newClickTime)) {
-            this._changeToEditingMode(fEvent);
+            this._changeToEditingMode(fEvent.target);
             this._listeners.dbclick(); // fire dbclick event
         }
 
@@ -402,21 +447,16 @@ export default class Text extends Base {
 
     /**
      * Change state of text object for editing
-     * @param {fabric.fEvent} fEvent.target is fabric.Text - Text object fired event
+     * @param {fabric.Text} obj - Text object fired event
      * @private
      */
-    _changeToEditingMode(fEvent) {
-        const obj = fEvent.target;
+    _changeToEditingMode(obj) {
         const ratio = this.getCanvasRatio();
         const textareaStyle = this._textarea.style;
 
         this.isPrevEditing = true;
 
-        const canvas = this.getCanvas();
-        const lowerCanvasElStyle = canvas.lowerCanvasEl.style;
-        const lowerElLeft = parseInt(lowerCanvasElStyle.left,10);
-        const lowerElTop = parseInt(lowerCanvasElStyle.top,10);
-        canvas.off('object:removed', this._listeners.remove);
+        this.getCanvas().off('object:removed', this._listeners.remove);
 
         obj.remove();
 
@@ -431,10 +471,8 @@ export default class Text extends Base {
         };
 
         textareaStyle.display = 'block';
-
-        textareaStyle.left = `${obj.oCoords.tl.x / ratio + lowerElLeft}px`;
-        textareaStyle.top = `${obj.oCoords.tl.y / ratio + lowerElTop}px`;
-
+        textareaStyle.left = `${obj.oCoords.tl.x / ratio}px`;
+        textareaStyle.top = `${obj.oCoords.tl.y / ratio}px`;
         textareaStyle.width = `${Math.ceil(obj.getWidth() / ratio)}px`;
         textareaStyle.height = `${Math.ceil(obj.getHeight() / ratio)}px`;
         textareaStyle.transform = `rotate(${obj.getAngle()}deg)`;

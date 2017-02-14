@@ -801,7 +801,17 @@ class FabricPhoto {
 
         shapeModule.change(activeObj, options);
     }
-
+    /**
+     * Start to draw shape on canvas (bind event on canvas)
+     * @example
+     * fabricPhoto.startDrawingShapeMode();
+     */
+    startDrawingShapeMode() {
+        if (this.getCurrentState() !== states.SHAPE) {
+            this._state = states.SHAPE;
+            this._getModule(modules.SHAPE).startDrawingMode();
+        }
+    }
     /**
      * End to draw shape on canvas (unbind event on canvas)
      * @example

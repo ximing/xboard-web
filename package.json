@@ -18,6 +18,7 @@
   "dependencies": {
     "babel-polyfill": "^6.20.0",
     "classnames": "^2.2.5",
+    "fast-json-patch": "^1.1.5",
     "flux-standard-action": "^1.1.0",
     "office-ui-fabric-react": "^1.6.0",
     "react": "^15.4.2",

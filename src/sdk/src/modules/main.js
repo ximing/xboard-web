@@ -117,6 +117,8 @@ export default class Main extends Base {
             enableRetinaScaling: true
         });
         this.canvas.selection = false;
+        this.canvas.setBackgroundColor({source: 'https://s3.meituan.net/v1/mss_814dc1610cda4b2e8febd6ea2c809db5/image/1488125929043.png', repeat: 'repeat'}, this.canvas.renderAll.bind(this.canvas));
+
     }
 
     /**

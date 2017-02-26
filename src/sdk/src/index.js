@@ -5,7 +5,7 @@ import util from './lib/util';
 import CustomEvents from './lib/custom-event';
 import scrollSkip from './lib/scroll-skip';
 
-import $ from 'jQuery';
+import $ from 'jquery';
 import mouseWheel from './lib/jquery-mousewheel';
 mouseWheel($);
 const events = consts.eventNames;

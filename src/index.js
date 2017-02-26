@@ -1,22 +1,18 @@
 'use strict';
 import './assert/scss/index.scss';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
-import { Router, Route } from 'react-router';
-import { browserHistory } from 'react-router';
-import {store} from './redux/index';
-
 import WrapContainer from './containers/wrap/index.js';
 import DrawWrapContainer from './containers/wrap/draw.js';
-
 import CreateContainer from './containers/create/index.js';
 import DrawContainer from './containers/draw/index.js';
 
+import rab, { connect } from 'rabjs';
+import { Router, Route } from 'rabjs/router';
+const app = rab();
 
-ReactDOM.render(
-    <Provider store={store}>
-        <Router history={browserHistory}>
+app.router(({ history }) => {
+    return (
+        <Router history={history}>
             <Route path="/board" component={WrapContainer}>
                 <Route path="create" component={CreateContainer} />
                 <Route path="recently" component={CreateContainer} />
@@ -26,6 +22,8 @@ ReactDOM.render(
                 <Route path="index" component={DrawContainer} />
             </Route>
         </Router>
-    </Provider>,
-    document.getElementById('wrap_container')
-);
+    );
+});
+
+// 5. Start
+app.start('#wrap_container');
